@@ -1,5 +1,7 @@
 package com.app.model;
 
+import com.app.dto.RestaurantDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,5 +33,12 @@ public class User {
     @Column(name = "role")
     private Role role;
 
+    @OneToMany
+    @JsonIgnore
     private List<Order> orderList;
+
+    @ElementCollection
+    private List<RestaurantDto> favoritesRestaurantList;
+
+    private List<Address> addressesList;
 }
