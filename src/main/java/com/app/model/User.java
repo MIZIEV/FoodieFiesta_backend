@@ -33,12 +33,13 @@ public class User {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
     @JsonIgnore
     private List<Order> orderList;
 
     @ElementCollection
     private List<RestaurantDto> favoritesRestaurantList;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressesList;
 }
