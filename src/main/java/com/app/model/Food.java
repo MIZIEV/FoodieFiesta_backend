@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -27,4 +30,25 @@ public class Food {
 
     @ManyToOne
     private Category foodCategory;
+
+    @Column(length = 1000)
+    @ElementCollection
+    private List<String> images;
+
+    @Column(name = "available")
+    private boolean available;
+
+    @Column(name = "is_vegeterian")
+    private boolean isVegetarian;
+
+    @Column(name = "is_seasonal")
+    private boolean isSeasonal;
+
+    @ManyToMany
+    private List<IngredientsItem> ingredientsItemList;
+
+    @ManyToOne
+    private Restaurant restaurant;
+
+    private Date createdAt;
 }
