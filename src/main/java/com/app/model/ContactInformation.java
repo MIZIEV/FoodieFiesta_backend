@@ -7,11 +7,6 @@ import lombok.Data;
 @Data
 public class ContactInformation {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "email")
     private String email;
 

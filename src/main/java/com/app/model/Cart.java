@@ -8,24 +8,23 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "order_item")
+@Table(name = "cart")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
+public class Cart {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Food food;
+    @Column(name = "total")
+    private Long total;
 
-    @Column(name = "quantity")
-    private int quantity;
+    @OneToOne
+    private User customer;
 
-    @Column(name = "total_price")
-    private Long totalPrice;
-
-    private List<String> ingredients;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> itemList;
 }
