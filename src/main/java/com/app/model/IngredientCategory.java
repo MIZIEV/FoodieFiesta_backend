@@ -1,20 +1,22 @@
 package com.app.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@Table(name = "category")
+@Table(name = "ingredient_category")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+@AllArgsConstructor
+public class IngredientCategory {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,4 +26,7 @@ public class Category {
     @ManyToOne
     @JsonIgnore
     private Restaurant restaurant;
+
+    @OneToMany
+    private List<IngredientsItem> ingredientsItemList;
 }
