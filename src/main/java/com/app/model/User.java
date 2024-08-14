@@ -31,9 +31,9 @@ public class User {
     private String password;
 
     @Column(name = "role")
-    private Role role;
+    private Role role = Role.CUSTOMER_ROLE;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
     private List<Order> orderList;
 
