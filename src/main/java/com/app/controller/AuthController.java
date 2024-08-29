@@ -3,24 +3,31 @@ package com.app.controller;
 import com.app.config.JwtProvider;
 import com.app.dto.AuthResponse;
 import com.app.model.Cart;
+import com.app.model.Role;
 import com.app.model.User;
 import com.app.repository.CartRepository;
 import com.app.repository.UserRepository;
+import com.app.request.LoginRequest;
 import com.app.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -77,5 +84,37 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
 
+        String username = req.getEmail();
+        String password = req.getPassword();
+
+        Authentication authentication = authenticate(username, password);
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String role = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
+
+        String jwt = jwtProvider.generateToken(authentication);
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setToken(jwt);
+        authResponse.setMessage("Login Successful");
+
+        authResponse.setRole(Role.valueOf(role));
+
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+    }
+
+    private Authentication authenticate(String username, String password) {
+
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+
+        if (userDetails == null) {
+            throw new BadCredentialsException("Invalid username!");
+        }
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new BadCredentialsException("Invalid password!");
+        }
+        return new UsernamePasswordAuthenticationToken(userDetails,
+                null, userDetails.getAuthorities());
+    }
 }

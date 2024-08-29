@@ -22,8 +22,9 @@ public class AppConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
+                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER_ROLE", "ADMIN_ROLE")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
@@ -31,7 +32,7 @@ public class AppConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        return null;
+        return http.build();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
