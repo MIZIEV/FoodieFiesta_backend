@@ -55,15 +55,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updaterRequest) throws Exception {
         Restaurant restaurant = getRestaurantById(restaurantId);
 
-        if(restaurant.getCuisineType()!=null){
+        if (restaurant.getCuisineType() != null) {
             restaurant.setCuisineType(updaterRequest.getCuisineType());
         }
 
-        if(restaurant.getDescription()!=null){
+        if (restaurant.getDescription() != null) {
             restaurant.setDescription(updaterRequest.getDescription());
         }
 
-        if(restaurant.getName()!=null){
+        if (restaurant.getName() != null) {
             restaurant.setName(updaterRequest.getName());
         }
         return restaurantRepository.save(restaurant);
@@ -89,7 +89,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant getRestaurantById(Long restaurantId) throws Exception {
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
 
-        if(optionalRestaurant.isEmpty()){
+        if (optionalRestaurant.isEmpty()) {
             throw new Exception("Restaurant not found with id - " + restaurantId);
         }
 
@@ -100,11 +100,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant getRestaurantByUserId(Long userId) throws Exception {
 
         Restaurant restaurant = restaurantRepository.findByOwnerId(userId);
-        if(restaurant == null){
+        if (restaurant == null) {
             throw new Exception("Restaurant not found with owner id - " + userId);
         }
 
-        return null;
+        return restaurant;
     }
 
     @Override
@@ -117,9 +117,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         dto.setImages(restaurant.getImages());
         dto.setName(restaurant.getName());
 
-        if(user.getFavoritesRestaurantList().contains(dto)){
+        if (user.getFavoritesRestaurantList().contains(dto)) {
             user.getFavoritesRestaurantList().remove(dto);
-        } else{
+        } else {
             user.getFavoritesRestaurantList().add(dto);
         }
 
