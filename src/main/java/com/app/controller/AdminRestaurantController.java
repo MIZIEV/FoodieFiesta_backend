@@ -3,6 +3,7 @@ package com.app.controller;
 import com.app.model.Restaurant;
 import com.app.model.User;
 import com.app.request.CreateRestaurantRequest;
+import com.app.response.MessageResponse;
 import com.app.service.RestaurantService;
 import com.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,30 @@ public class AdminRestaurantController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Restaurant> deleteRestaurant(@PathVariable("id") Long id) throws Exception {
+    private ResponseEntity<MessageResponse> deleteRestaurant(@PathVariable("id") Long id) throws Exception {
 
         restaurantService.deleteRestaurant(id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        MessageResponse messageResponse = new MessageResponse();
+        messageResponse.setMessage("Restaurant deleted successfully");
+
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/status")
+    private ResponseEntity<Restaurant> updateRestaurantStatus(@PathVariable("id") Long id) throws Exception {
+
+        Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
+
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    private ResponseEntity<Restaurant> getRestaurantByUserId(@RequestHeader("Authorization") String jwt) throws Exception {
+
+        User user = userService.findUserByJwt(jwt);
+        Restaurant restaurant = restaurantService.getRestaurantByUserId(user.getId());
+
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 }
