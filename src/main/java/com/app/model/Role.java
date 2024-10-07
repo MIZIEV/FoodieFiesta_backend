@@ -2,7 +2,7 @@ package com.app.model;
 
 public enum Role {
 
-    CUSTOMER_ROLE,
-    RESTAURANT_OWNER_ROLE,
-    ADMIN_ROLE
+    ROLE_CUSTOMER,
+    ROLE_RESTAURANT_OWNER,
+    ROLE_ADMIN
 }

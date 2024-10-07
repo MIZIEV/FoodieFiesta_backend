@@ -1,8 +1,8 @@
 package com.app.controller;
 
+import com.app.dto.RestaurantDto;
 import com.app.model.Restaurant;
 import com.app.model.User;
-import com.app.request.CreateRestaurantRequest;
 import com.app.service.RestaurantService;
 import com.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +48,16 @@ public class RestaurantController {
 
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
+
+    @PostMapping("/{id}/add-favorites")
+    private ResponseEntity<RestaurantDto> addToFavorites(@RequestHeader("Authorization") String jwt,
+                                                         @PathVariable("id") Long id) throws Exception {
+
+        User user = userService.findUserByJwt(jwt);
+        RestaurantDto restaurantDto = restaurantService.addToFavorites(id, user);
+
+        return new ResponseEntity<>(restaurantDto, HttpStatus.OK);
+    }
+
+
 }
