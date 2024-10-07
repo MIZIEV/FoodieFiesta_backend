@@ -33,7 +33,7 @@ public class User {
     private String password;
 
     @Column(name = "role")
-    private Role role = Role.CUSTOMER_ROLE;
+    private Role role = Role.ROLE_CUSTOMER;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
